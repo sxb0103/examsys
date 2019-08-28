@@ -3,9 +3,9 @@ package com.fqedu.examsys.entity;
 import lombok.Data;
 
 @Data
-public class RolePermision {
+public class RolePermission {
 
-    private Integer rolePermisionId;
+    private Integer rolePermissionId;
 
     private Integer rid;
 

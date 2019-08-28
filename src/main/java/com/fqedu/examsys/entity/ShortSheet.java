@@ -13,7 +13,7 @@ public class ShortSheet {
 
     private String shortReply;
 
-    private Integer sorce;
+    private Integer score;
 
 
 }

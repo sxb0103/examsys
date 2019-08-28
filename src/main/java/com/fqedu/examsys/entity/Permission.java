@@ -3,17 +3,17 @@ package com.fqedu.examsys.entity;
 import lombok.Data;
 
 @Data
-public class Permision {
+public class Permission {
 
     private Integer pid;
 
-    private String resoureName;
+    private String resourceName;
 
     private Integer parentId;
 
-    private String penmisionName;
+    private String permissionName;
 
-    private String resoureType;
+    private String resourceType;
 
     private String url;
 
