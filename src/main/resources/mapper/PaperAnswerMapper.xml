@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fqedu.examsys.dao.PaperAnswerDao">
+    <select id="findByPaperUserId" parameterType="map"  resultType="paperAnswer">
+        select a.id,a.paperId,a.userId,a.short_reply,a.short_id,b.topic,b.answer,c.username
+        from short_sheet a INNER JOIN t_short_answer b on a.short_id=b.id
+                           INNER JOIN user c on a.userId=c.id
+        where a.paperId=#{paperId} and a.userId=#{userId}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fqedu.examsys.dao.TSubjectDao">
+    <select id="findSubBySortId" parameterType="int"  resultType="tSubject">
+        select a.id,a.course,a.sortId
+        from t_subject a INNER JOIN t_sort b on a.sortId=b.id
+        <where>
+            1=1
+            <if test="sortId !=null">
+                and a.sortId=#{sortId}
+            </if>
+        </where>
+    </select>
+</mapper>

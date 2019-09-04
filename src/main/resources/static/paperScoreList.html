@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #content {
+            margin: 20px auto;
+        }
+    </style>
+    <link rel="stylesheet" href="layui/css/layui.css" type="text/css"/>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+    <script type="text/javascript" src="js/vue.min.js"></script>
+
+</head>
+</head>
+<body>
+<div id="content">
+    <!--收索-->
+    <div class="layui-form searchDiv">
+        <div>
+
+            <!--            <button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加</button>-->
+
+            <!--            <button type="button" id="batchDel" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="demo1">批量删除</button>-->
+
+            <!--            <div class="layui-inline">-->
+            <!--                <div class="layui-input-inline">-->
+            <!--                    <input type="text" id="text1" name="username" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div id="myBar" class="layui-hide">-->
+            <!--            </div>-->
+            <div class="layui-input-inline">
+                <div class="layui-select-title">
+                    <select id="modules1" lay-verify="required" lay-search class="layui-input" lay-filter="tests">
+                        <option value="">科目名称</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form layui-input-inline">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select id="modules2" lay-verify="required" lay-search="">
+                            <option value="">课程名称</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <button id="bt_find" type="button" class="layui-btn" data-type="reload">查询</button>
+        </div>
+
+
+    </div>
+
+    <!--表格-->
+    <table class="layui-hide" id="demo" lay-filter="test"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">评卷</a>
+        <!--        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    </script>
+
+</div>
+<script>
+    // var sort;
+    // var subject;
+    layui.use(['laypage', 'layer', 'table', 'element', 'form'], function () {
+        var laypage = layui.laypage //分页
+            , layer = layui.layer //弹层
+            , table = layui.table //表格
+            , element = layui.element//元素操作
+            , form = layui.form;
+
+        //监听下拉事件
+        form.on('select(tests)', function (data) {
+
+            setSubject(data.value);
+
+            layer.msg(data.value);
+
+        });
+
+
+        //表头工具，获取科目
+        $.ajax({
+            type: "post",///post
+            url: "findAllSort.do", //"findAllSort.do",//demo.json
+            dataType: "json",
+            success: function (data) {
+                var html = "";
+                if (data.code == 0) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        html += '<option id="option1" value="' + data.data[i].id + '" >' + data.data[i].sortName + '</option>';
+                    }
+                    $("#modules1").append(html);
+                    // sort=$("#modules1").val();
+                    // setSubject(sort);
+                    form.render();
+                    // $(".layui-form layui-input-inline").reload();
+
+                } else {
+                    layer.msg("获取数据异常");
+                }
+            }
+        });
+
+        //根据科目获取课程
+        function setSubject(sortId) {
+            $.ajax({
+                type: "post",
+                url: "findSubBySortId.do?sortId=" + sortId,
+                // data:sortId,
+                dataType: "json",
+                success: function (data) {
+                    var html = "";
+                    if (data.code == 0) {
+                        $("#modules2").empty();
+                        for (var i = 0; i < data.data.length; i++) {
+                            html += '<option id="option1" value="' + data.data[i].id + '">' + data.data[i].course + '</option>';
+                        }
+                        $("#modules2").append($(html));
+                        form.render();
+
+                    } else {
+                        layer.msg("获取数据异常");
+                    }
+                }
+            });
+        }
+
+
+        //执行一个 table 实例
+        var table1 = table.render({
+            elem: '#demo'
+            , id: "videoTable"
+            , height: 420
+            , url: 'findAll.do' //数据接口//findAll.do//demo.json
+            // ,toolbar:'#myBar'
+            , title: '评分管理'
+            , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                //,groups: 1 //只显示 1 个连续页码
+                , first: false //不显示首页
+                , last: false //不显示尾页
+                , limits: [5, 10, 20]
+
+            } //开启分页,               //type中的可选值, checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test'
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: '试卷编号', width: 100, sort: true, fixed: 'left'}
+                , {field: 'sortName', title: '科目名称', width: 100}
+                , {field: 'course', title: '课程名称', width: 100, sort: true}
+                , {field: 'paperName', title: '试卷名称', width: 100, sort: true}
+                , {field: 'starTime', title: '开始时间', width: 150, sort: true}
+                , {field: 'endTime', title: '结束时间', width: 150, sort: true}
+                , {field: 'username', title: '考生姓名', width: 100, sort: true}
+                //当后台传回的参数如果是一个对象，无法通过field直接获得字段内容，
+                //此时要定义一个templet:function() 方法来获取字段内容，注意templet:function不能改，括号里的参数可以随便定义
+                //这个方法的作用是用定义的参数接收返回的json对象，然后找到role对象，得到role对象的roleName
+                //         ,{title: '角色名称', width: 150,templet:function (rName) {
+                //     return rName.role.roleName
+                // }}
+                , {field: 'shortScore', title: '简答分数', width: 100, sort: true}
+                , {fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo'}
+
+            ]]
+        });
+
+
+        $('#bt_find').click(function () {
+            table1.reload({
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: { // 额外需要提交的参数
+                    title: $("#text1").val(),
+                    speakerId: $("#modules1").val(),
+                    courseId: $("#modules2").val(),
+                }
+            })
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            // if (layEvent === 'detail') {
+            //     layer.msg('查看操作');
+            // } else if (layEvent === 'del') {
+            //     layer.confirm('真的删除行么', function (index) {
+            //         // obj.del(); //删除对应行（tr）的DOM结构
+            //         // layer.close(index);
+            //         // //向服务端发送删除指令
+            //         $.ajax({
+            //             type:'post',
+            //             url:'updateDisplayOne.do',
+            //             data:{"id": data.id},
+            //             dataType:'json',
+            //             success:function () {
+            //                 window.location.reload();
+            //             }
+            //         });
+            //     });
+            // } else
+            if (layEvent === 'edit') {
+                // layer.msg('编辑操作');
+                layer.open({
+                    type: 2
+                    , title: '评卷'
+                    , area: ['800px', '600px']
+                    , content: 'paperAnswer.html?paperId=' + data.paperId + '&&userId=' + data.userId
+                })
+            }
+        });
+
+    })
+</script>
+
+<!--<script type="text/javascript">-->
+
+<!--    //添加员工-->
+<!--    function add() {-->
+<!--        layer.open({-->
+<!--            type: 2 //此处以iframe举例,为什么是2-->
+<!--            , title: '添加员工'-->
+<!--            , area: ['600px', '600px']-->
+<!--            , content: 'videoAdd.html'-->
+<!--        })-->
+<!--    }-->
+<!--</script>-->
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

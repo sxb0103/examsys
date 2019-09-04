@@ -9,6 +9,8 @@ public class TPaper {
 
     private Integer id;
 
+    private String paperName;
+
     private Integer sortId;
 
     private Integer subId;
@@ -29,5 +31,8 @@ public class TPaper {
 
     private Date endTime;
 
+    private String shortId;
+
+    private Integer shortScore;
 
 }

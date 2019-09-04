@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+    <!--<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<div id="mybox" style="width: 800px; margin: 100px auto; display: flex">
+
+
+    <div id="test12" class="demo-tree-more" style="width: 50%"></div>
+    <form style="width: 50%;top: 200px;position: relative;">
+        <div class="layui-input-inline" >
+            <div class="layui-select-title">
+                <select id="modules1" lay-verify="required" lay-search class="layui-input" lay-filter="tests">
+                    <option value="">角色名称</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-btn-container">
+            <button type="button" class="layui-btn layui-btn-sm" lay-demo="getChecked">提交修改</button>
+        </div>
+    </form>
+</div>
+
+
+
+<script>
+    layui.use(['tree', 'util', 'form'], function () {
+        var tree = layui.tree
+            , layer = layui.layer
+            , util = layui.util
+            , form = layui.form
+
+            //需要展示的树状数据
+            , data = [{
+                title: '系统管理'
+                , id: 1
+                // , checked: true
+                , spread: true
+                , children: [{
+                    title: '用户管理'
+                    , id: 2
+                }, {
+                    title: '角色管理'
+                    , id: 3
+                }, {
+                    title: '权限管理'
+                    , id: 4
+                }, {
+                    title: '分配权限'
+                    , id: 5
+                }]
+            }, {
+                title: '试题管理'
+                , id: 6
+                // , checked: true
+                , spread: true
+                , children: [{
+                    title: '试题分类'
+                    , id: 7
+                }, {
+                    title: '创建试题'
+                    , id: 8
+                }, {
+                    title: '试题导入'
+                    , id: 9
+                }, {
+                    title: '生成试卷'
+                    , id: 10
+                }]
+            }, {
+                title: '考试管理'
+                , id: 11
+                // , checked: true
+                , spread: true
+                , children: [{
+                    title: '考试场次管理'
+                    , id: 12
+                }]
+            },
+                {
+                title: '考生信息'
+                , id: 13
+                // , checked: true
+                , spread: true
+                , children: [{
+                    title: '查看'
+                    , id: 14
+                }, {
+                    title: '修改'
+                    , id: 15
+                }]
+            }, {
+                title: '成绩管理'
+                , id: 16
+                // , checked: true
+                , spread: true
+                , children: [{
+                    title: '判卷'
+                    , id: 17
+                }]
+            }, {
+                title: '统计管理'
+                , id: 18
+                // , checked: true
+                , spread: true
+                , children: [{
+                    title: '考生成绩查询'
+                    , id: 19
+                }]
+            }];
+
+
+        //根据‘需要展示的树状数据’，初始化树状结构
+        tree.render({
+            elem: '#test12'
+            , data: data
+            , showCheckbox: true  //是否显示复选框
+            , id: 'demoId1'
+            , isJump: true //是否允许点击节点时弹出新窗口跳转
+            , click: function (obj) {
+                var data = obj.data;  //获取当前点击的节点数据
+                layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+            }
+        });
+
+        //获取角色id
+        $.ajax({
+            type: "post",
+            url: "findAllRole.do",//"findAllRole.do",//demo.json
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 0) {
+                    var html = '';
+                    for (var i = 0; i < data.data.length; i++) {
+                        html += '<option name="option1" value="' + data.data[i].rid + '">' + data.data[i].roleName + '</option>'
+                    }
+                    $('#modules1').append(html);
+                    form.render();
+                } else {
+                    layer.msg("获取数据异常")
+                }
+            }
+        });
+
+        //修改选中的权限
+        util.event('lay-demo', {
+            getChecked: function (othis) {
+
+                //获取选中节点的数据的tree对象，注意tree对象是父子结构的，在这里不能直接用，因此要重新计算
+                // 获得的数据：[{"title":"成绩管理",
+                //              "id":16,
+                //              "spread":true,
+                //              "children":[{"title":"判卷",
+                //                           "id":17
+                //                         }]
+                //            }]
+                var checkedData = tree.getChecked('demoId1');
+
+                if(checkedData.length<=0){
+                    layer.msg("请选择权限")
+                }else if($('#modules1').val()==""){
+                    layer.msg("请选择角色")
+                }else {
+                    //计算对象中的id
+                    var ids=getCheckedId(checkedData);
+                    $.ajax({
+                        type:"post",
+                        url:"addRolePer.do",
+                        data:{
+                            "rid":$('#modules1').val(),
+                            "jsonPer":ids
+                        },
+                        dataType:"json",
+                        success:function (data) {
+                            if(data.code==1){
+                                layer.msg("权限添加失败~")
+                            }else {
+                                layer.msg("添加成功")
+                               window.location.href="laTree.html";
+                            }
+                        }
+                    })
+                    // layer.alert($('#modules1').val());
+                    // console.log(checkedData);
+                    // layer.alert(ids);
+                }
+                 // layer.alert(JSON.stringify(checkedData), {shade: 0});
+                //layer.alert($('#modules1').val());
+            }
+        });
+        //获取选中的节点
+        function getCheckedId(jsonObj) {
+            var id = "";
+            $.each(jsonObj, function (index, item) {
+                if (id != "") {
+                    id = id + "," + item.id;
+                }
+                else {
+                    id = item.id;
+                }
+                var i = getCheckedId(item.children);
+                if (i != "") {
+                    id = id + "," + i;
+                }
+            });
+            return id;
+        }
+    });
+</script>
+</body>
+</html>

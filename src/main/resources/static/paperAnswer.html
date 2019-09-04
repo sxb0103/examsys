@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/basic.css" media="all">
+    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/vue.min.js"></script>
+    <style>
+        .aa {
+            padding: 12px 4px 30px 14px;
+            font-size: 13px;
+            border: 1px solid #f9ebeb;
+            border-radius: 6px;
+            background: #feedf0;
+            margin: 3px 10px 3px 10px
+        }
+
+        .weui-media-box__title {
+            padding-left: 15px;
+            padding-top: 10px;
+            font-weight: 600
+        }
+
+        .answer {
+            padding: 12px 4px 30px 14px;
+            font-size: 13px;
+            border: 1px solid #f9ebeb;
+            border-radius: 6px;
+            background: #E5E5E5;
+            margin: 3px 10px 3px 10px
+        }
+
+        .scores {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-form-item">
+
+        <label class="layui-form-label" style="font-size:1.1rem">考生名字</label>
+        <label id="username" class="layui-form-label" style="font-size:1.1rem"></label>
+        <label class="layui-form-label" style="font-size:1.1rem">试卷id</label>
+        <label id="paperId" class="layui-form-label" style="font-size:1.1rem"></label>
+
+    </div>
+
+    <div class="qcontentmain weui-cells weui-cells_checkbox swiper-slide" id="d79945" qid="d79945" score="40.00"
+         type="Ask" nodeid="node_80e661">
+        <h3 id="node_80e661" class="weui-media-box__title">简答题</h3>
+        <div><!--设置一个父节点用于插入克隆节点-->
+            <div id="paperAnswer-0">
+                <div class="q_content" id="q_content"></div>
+
+                <div class="answer">
+                    <p>考生答案：<br>
+                    <p id="answer1"></p>
+                </div>
+                <div class="aa">
+                    <p>标准答案：<br>
+                    <p id="answer" name="ans"></p>
+                    <!--得分-->
+                    得分：<input value="0" name="judge_score" id="score" type="text" class="scores"></p>
+                </div>
+                <input type="hidden" name="shortId" class="shortId"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script src="layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layer', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        var length = 0;
+
+        //获取页面数据
+        $.ajax({
+            type: "get",
+            url: "findByPaperUserId.do" + window.location.search,//param 两种在静态页面中获取地址中参数的方法，jsp页面中可以用el表达式
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 0) {
+
+                    //绑定卷头数据
+                    $("#username").text(data.data[0].username);
+                    $("#paperId").text(data.data[0].paperId);
+                    //获取父节点
+                    var sourceNode = document.getElementById("paperAnswer-0");
+
+                    //获取数据长度
+                    length = data.data.length;
+
+                    //循环克隆父节点
+                    for (var i = 1; i < length; i++) {
+                        var clonedNode = sourceNode.cloneNode(true); // 克隆节点
+                        clonedNode.setAttribute("id", "paperAnswer-" + i); // 修改一下id 值，避免id 重复
+                        sourceNode.parentNode.appendChild(clonedNode); // 在父节点插入克隆的节点
+
+                    }
+
+                    //绑定数据
+                    for (var j = 0; j < data.data.length; j++) {
+                        var html1 = '';
+                        var html2 = '';
+                        var html3 = '';
+                        //准备拼接语句
+                        html1 += '<span>' + (j+1) + '</span><span>' + data.data[j].topic + '</span>';
+                        html2 += '<span>' + data.data[j].answer + '</span>';
+                        html3 += '<span>' + data.data[j].shortReply + '</span>';
+
+                        //绑定数据，重点
+                        $("#paperAnswer-" + j + " #q_content").append($(html1));
+                        $("#paperAnswer-" + j + " #answer").append($(html2));
+                        $("#paperAnswer-" + j + " #answer1").append($(html3));
+                        $("#paperAnswer-" + j + " .shortId").val(data.data[j].shortId);
+
+                        //先获取父节点
+                        //找父节点下面的标签，find()[]方法就是找父节点下的标签，参数必须是标签（div）或者name值，[]中是下标值
+                        // $("#paperAnswer-" + j ).find("div")[0].html($(html1));
+                        // $("#paperAnswer-" + j ).find("div")[1].html($(html2));
+                        // $("#paperAnswer-" + j ).find("div")[2].html($(html3));
+                    }
+
+                    form.render();
+                } else {
+                    alert(data.data);
+                }
+            }
+        });
+
+        // window.onload = function () {
+        //     var sourceNode = document.getElementById("div-0"); // 获得被克隆的节点对象
+        //     for (var i = 1; i < 5; i++) {
+        //         var clonedNode = sourceNode.cloneNode(true); // 克隆节点
+        //         clonedNode.setAttribute("id", "div-" + i); // 修改一下id 值，避免id 重复
+        //         sourceNode.parentNode.appendChild(clonedNode); // 在父节点插入克隆的节点
+        //     }
+
+
+        //修改成绩
+        form.on('submit(demo1)', function (data) {
+            // JSON.stringify 将js对象转为json格式的字符串
+            // data.field 表单中提交的数据
+//                    layer.alert(JSON.stringify(data.field), {
+//                        title: '最终的提交信息'
+//                    })
+
+            //显示data数据，重点：将对象转为json才能显示，否则就只会显示object
+            // alert(JSON.stringify(data));
+            //这条语句显示失败，以后再研究
+            // layer.msg(JSON.stringify(data));
+
+            //创建数组用于存储题目id和分数
+            var conditions = [];
+            for (var m = 0; m < length; m++) {
+                var record = {
+                    "shortId": $("#paperAnswer-" + m + " .shortId").val(),
+                    "score": $("#paperAnswer-" + m + " #score").val()
+                };
+                conditions.push(record);
+
+                // alert(JSON.stringify(conditions))
+            }
+            // alert(JSON.stringify(conditions))
+
+            var conditionsStr=JSON.stringify(conditions);
+
+            $.ajax({
+                type: 'post',
+                url: 'updateShortSheet.do' + window.location.search,
+                data: {conditions:conditionsStr},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 0) {
+                        var t = parent.layui.table;
+                        t.reload('videoTable');// 重新加载页面,demo 表示父窗体table标签的id值
+                        var index = parent.layer.getFrameIndex(window.name);//先得到当前iframe层的索引
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+
+                    } else {
+                        alert(data.data);
+                    }
+                }
+            });
+            return false;
+        })
+
+    })
+</script>
+</body>
+</html>

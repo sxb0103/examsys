@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #content {
+            margin: 20px auto;
+        }
+    </style>
+    <link rel="stylesheet" href="layui/css/layui.css" type="text/css"/>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+
+</head>
+</head>
+<body>
+
+<form class="layui-form" action="" id="type1">
+    <label class="layui-form-label" style="width: 100px">试题类型</label>
+    <label class="layui-form-label">单选题</label>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" style="width: 100px">试题内容：</label>
+        <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" rows="6" style="width: 300px"
+                                      lay-verify="required"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" style="width: 100px">选项A：</label>
+        <div class="layui-input-block">
+            <textarea rows="3" style="width: 300px" lay-verify="required"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" style="width: 100px">选项B：</label>
+        <div class="layui-input-block">
+            <textarea rows="3" style="width: 300px" lay-verify="required"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" style="width: 100px">选项C：</label>
+        <div class="layui-input-block">
+            <textarea rows="3" style="width: 300px" lay-verify="required"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" style="width: 100px">选项D:</label>
+        <div class="layui-input-block">
+            <textarea rows="3" style="width: 300px" lay-verify="required"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">答案</label>
+        <div class="layui-input-block">
+            <input type="radio" name="answer" value="A" title="A" checked>
+            <input type="radio" name="answer" value="B" title="B">
+            <input type="radio" name="answer" value="C" title="C">
+            <input type="radio" name="answer" value="D" title="D">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 100px">试题分类</label>
+        <div class="layui-input-block" style="width: 300px">
+            <select name="type" lay-verify="required">
+                <option value=""></option>
+                <option value="0">java</option>
+                <option value="1">php</option>
+                <option value="2">python</option>
+                <option value="3">c++</option>
+                <option value="4">c#</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    var sort;
+    var subject;
+    layui.use(['laypage', 'layer', 'table', 'element','form'], function () {
+        var laypage = layui.laypage //分页
+            , layer = layui.layer //弹层
+            , table = layui.table //表格
+            , element = layui.element//元素操作
+            , form=layui.form;
+
+        //监听下拉事件
+        form.on('select(tests)', function (data) {
+
+            setSubject(data.value);
+
+            layer.msg(data.value);
+
+        });
+
+
+        //表头工具，获取科目
+        $.ajax({
+            type: "post",///post
+            url:"findAllSort.do", //"findAllSort.do",//demo.json
+            dataType: "json",
+            success: function (data) {
+                var html = "";
+                if (data.code == 0) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        html += '<option id="option1" value="' + data.data[i].id + '" >' + data.data[i].sortName + '</option>';
+                    }
+                    $("#modules1").append(html);
+                    // sort=$("#modules1").val();
+                    // setSubject(sort);
+                    form.render();
+                    // $(".layui-form layui-input-inline").reload();
+
+                } else {
+                    layer.msg("获取数据异常");
+                }
+            }
+        });
+
+        function setSubject(sortId){
+            $.ajax({
+                type: "post",
+                url: "findSubBySortId.do?sortId="+sortId,
+                // data:sortId,
+                dataType: "json",
+                success: function (data) {
+                    var html = "";
+                    if (data.code == 0) {
+                        $("#modules2").empty();
+                        for (var i = 0; i < data.data.length; i++) {
+                            html += '<option id="option1" value="' + data.data[i].id + '">' + data.data[i].course + '</option>';
+                        }
+                        $("#modules2").append($(html));
+                        form.render();
+
+                    } else {
+                        layer.msg("获取数据异常");
+                    }
+                }
+            });
+        }
+
+        // //表头工具，获取课程
+        // $.ajax({
+        //     type: "post",
+        //     url: "findSubBySortId.do",
+        //     data:$("#modules1").val(),
+        //     dataType: "json",
+        //     success: function (data) {
+        //         var html = "";
+        //         if (data.code == 0) {
+        //             subject = data.data;
+        //             for (var i = 0; i < data.data.length; i++) {
+        //                 html += '<option id="option1" value="' + data.data[i].id + '">' + data.data[i].course + '</option>';
+        //             }
+        //             $("#modules2").append($(html));
+        //              form.render();
+        //
+        //         } else {
+        //             layer.msg("获取数据异常");
+        //         }
+        //     }
+        // });
+
+
+
+
+
+
+        //执行一个 table 实例
+        var table1 = table.render({
+            elem: '#demo'
+            , id: "videoTable"
+            , height: 420
+            , url: 'demo.json' //数据接口//findAll.do
+            ,toolbar:'#myBar'
+            , title: '评分管理'
+            , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                //,groups: 1 //只显示 1 个连续页码
+                , first: false //不显示首页
+                , last: false //不显示尾页
+                , limits: [5, 10, 20]
+
+            } //开启分页,               //type中的可选值, checkbox: true, align: 'center', LAY_CHECKED: false, filter: 'test'
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: '试卷编号', width: 100, sort: true, fixed: 'left'}
+                , {field: 'sortName', title: '科目名称', width: 100}
+                , {field: 'course', title: '课程名称', width: 100, sort: true}
+                , {field: 'paperName', title: '试卷名称', width: 100, sort: true}
+                , {field: 'starTime', title: '开始时间', width: 150, sort: true}
+                , {field: 'endTime', title: '结束时间', width: 150, sort: true}
+                , {field: 'username', title: '考生姓名', width: 100, sort: true}
+                , {field: 'shortScore', title: '简答分数', width: 100, sort: true}
+                , {fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo'}
+
+            ]]
+        });
+
+
+        $('#bt_find').click(function () {
+
+
+            table1.reload({
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: { // 额外需要提交的参数
+                    title: $("#text1").val(),
+                    speakerId: $("#modules1").val(),
+                    courseId: $("#modules2").val(),
+                }
+            })
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'detail') {
+                layer.msg('查看操作');
+            } else if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    // obj.del(); //删除对应行（tr）的DOM结构
+                    // layer.close(index);
+                    // //向服务端发送删除指令
+                    $.ajax({
+                        type:'post',
+                        url:'updateDisplayOne.do',
+                        data:{"id": data.id},
+                        dataType:'json',
+                        success:function () {
+                            window.location.reload();
+                        }
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                // layer.msg('编辑操作');
+                layer.open({
+                    type: 2
+                    , title: '修改视频信息'
+                    , area: ['800px', '600px']
+                    , content: 'videoUpdate.html?id=' + data.id
+                })
+            }
+        });
+
+        // //批量删除事件
+        // $('#batchDel').click(function () {
+        //
+        //     var checkStatus = table.checkStatus('videoTable') //table.checkStatus('videoTable') //table.checkStatus('videoTable')
+        //         , data = checkStatus.data;
+        //     if (data == "") {
+        //         layer.msg('至少要选一个', {icon: 2});
+        //         return;
+        //     }
+        //     //获取所选的对象的id并进行拼接
+        //     var ids = "";
+        //     if (data.length > 0) {
+        //         for (var i = 0; i < data.length; i++) {
+        //             ids += data[i].id + ",";
+        //         }
+        //     }
+        //     //执行删除
+        //     layer.confirm('确认要删除吗?' + ids, function (index) {
+        //         $.ajax({
+        //             type: "post",
+        //             url: "updateDisplay.do",
+        //             data: {"ids": ids},
+        //             success: function (data) {
+        //                 if (data.code == 0) {
+        //                     layer.msg('删除成功', {icon: 1});
+        //                     window.location.reload();
+        //                 } else {
+        //                     layer.msg('删除失败', {icon: 1});
+        //                     window.location.reload();
+        //                 }
+        //             }
+        //         });
+        //         //window.parent.location.reload();
+        //        // window.location.reload();
+        //     });
+        //     return false;
+        // });
+    })
+</script>
+
+<!--<script type="text/javascript">-->
+
+<!--    //添加员工-->
+<!--    function add() {-->
+<!--        layer.open({-->
+<!--            type: 2 //此处以iframe举例,为什么是2-->
+<!--            , title: '添加员工'-->
+<!--            , area: ['600px', '600px']-->
+<!--            , content: 'videoAdd.html'-->
+<!--        })-->
+<!--    }-->
+
+
+<!--</script>-->
+<!--<script>-->
+<!--    function sortId() {-->
+<!--        $.ajax({-->
+<!--            type: "post",-->
+<!--            url: "findSubBySortId.do",-->
+<!--            data:$("#modules1").val(),-->
+<!--            dataType: "json",-->
+<!--            success: function (data) {-->
+<!--                var html = "";-->
+<!--                if (data.code == 0) {-->
+<!--                    for (var i = 0; i < data.data.length; i++) {-->
+<!--                        html += '<option id="option1" value="' + data.data[i].id + '">' + data.data[i].course + '</option>';-->
+<!--                    }-->
+<!--                    $("#modules2").append($(html));-->
+<!--                    form.render();-->
+
+<!--                } else {-->
+<!--                    layer.msg("获取数据异常");-->
+<!--                }-->
+<!--            }-->
+<!--        })-->
+<!--    }-->
+<!--</script>-->
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

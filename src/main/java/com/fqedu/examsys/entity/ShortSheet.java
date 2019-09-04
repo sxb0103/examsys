@@ -15,5 +15,5 @@ public class ShortSheet {
 
     private Integer score;
 
-
+    private Integer shortId;
 }

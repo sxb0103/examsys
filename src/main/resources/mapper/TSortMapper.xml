@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fqedu.examsys.dao.TSortDao">
+    <select id="findAllSort"  resultType="tSort">
+        select id,sort_name from t_sort
+    </select>
+
+    <update id="updateSortByPaperId" parameterType="map">
+        update t_score set short_score=#{shortScore},score=select_score+short_score
+        where paperId=#{paperId} and userId=#{userId}
+
+    </update>
+</mapper>
