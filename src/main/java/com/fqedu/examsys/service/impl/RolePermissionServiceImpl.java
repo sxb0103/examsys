@@ -11,6 +11,11 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     @Autowired(required = false)
     public RolePermissionDao rolePermissionDao;
 
+    /**
+     *
+     * @param rid
+     * @param pid
+     */
     @Override
     public void insertRolPer(Integer rid, Integer pid) {
         rolePermissionDao.insertRolPer(rid, pid);

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class TSubject {
 
+    //
     private Integer id;
 
     private String course;

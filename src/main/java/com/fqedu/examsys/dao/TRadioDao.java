@@ -6,5 +6,9 @@ import java.util.List;
 
 public interface TRadioDao {
 
+    /**
+     *
+     * @param tRadios
+     */
     public void insertTRadioAll(List<TRadio> tRadios);
 }

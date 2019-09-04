@@ -6,5 +6,10 @@ import java.util.List;
 
 
 public interface RoleDao {
+
+    /**
+     *
+     * @return
+     */
     public List<Role> findAllRole();
 }

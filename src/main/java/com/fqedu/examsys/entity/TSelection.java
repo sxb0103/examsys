@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class TSelection {
 
+    //
     private Integer id;
 
     private String topic;

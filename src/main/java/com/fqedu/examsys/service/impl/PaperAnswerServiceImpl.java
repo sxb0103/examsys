@@ -14,6 +14,12 @@ public class PaperAnswerServiceImpl implements PaperAnswerServic {
     @Autowired(required = false)
     public PaperAnswerDao paperAnswerDao;
 
+    /**
+     *
+     * @param paperId
+     * @param userId
+     * @return
+     */
     @Override
     public List<PaperAnswer> findByPaperUserId(Integer paperId, Integer userId) {
         List<PaperAnswer> paperAnswerList = paperAnswerDao.findByPaperUserId(paperId, userId);

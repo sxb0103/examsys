@@ -22,6 +22,12 @@ public class TSortServiceImpl implements TSortService {
         return tSortDao.findAllSort();
     }
 
+    /**
+     *
+     * @param paperId
+     * @param userId
+     * @param shortScore
+     */
     @Override
     public void updateSortByPaperId(Integer paperId, Integer userId, Integer shortScore) {
         tSortDao.updateSortByPaperId(paperId, userId, shortScore);

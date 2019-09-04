@@ -14,6 +14,10 @@ public class TRadioServiceImpl implements TRadioService {
     @Autowired(required = false)
     public TRadioDao tRadioDao;
 
+    /**
+     *
+     * @param tRadios
+     */
     @Override
     public void insertTRadioAll(List<TRadio> tRadios) {
         tRadioDao.insertTRadioAll(tRadios);

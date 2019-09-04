@@ -21,6 +21,10 @@ public class RolePermissionController {
     @Autowired
     public RolePermissionService rolePermissionService;
 
+    /**
+     *
+     * @return
+     */
     @RequestMapping("/findAllRole.do")
     @ResponseBody
     public JsonResult findAllRole() {

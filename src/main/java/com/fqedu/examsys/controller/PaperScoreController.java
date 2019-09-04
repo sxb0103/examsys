@@ -37,6 +37,14 @@ public class PaperScoreController {
 //        return "videoIndex";
 //    }
 
+    /**
+     * 获取所有试卷成绩
+     * @param sortId
+     * @param subId
+     * @param page
+     * @param limit
+     * @return
+     */
     @RequestMapping("/findAll.do")
     @ResponseBody
     public JsonResult findAll(Integer sortId, Integer subId, Integer page, Integer limit) {
@@ -50,6 +58,11 @@ public class PaperScoreController {
         return jsonResult;
     }
 
+    /**
+     * 根据
+     * @param subId
+     * @return
+     */
     @RequestMapping("/findBySubId.do")
     public List<PaperScore> findAllBySubId(Integer subId) {
         return paperScoreService.findListBySubId(subId);

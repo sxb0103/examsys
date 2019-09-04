@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class PaperAnswer {
 
+    //
     private Integer id;
 
     private Integer paperId;

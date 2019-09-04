@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 public class PaperScore {
 
+    //
     private Integer sortId;
 
     private String sortName;

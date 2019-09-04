@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fqedu.examsys.dao.TSortDao">
+    <!--注释-->
     <select id="findAllSort"  resultType="tSort">
         select id,sort_name from t_sort
     </select>

@@ -24,6 +24,13 @@ public class ShortSheetController {
     @Autowired
     public TSortService tSortService;
 
+    /**
+     *
+     * @param request
+     * @param paperId
+     * @param userId
+     * @return
+     */
     @RequestMapping("/updateShortSheet.do")
     @ResponseBody
     public JsonResult updateShortSheet(HttpServletRequest request, Integer paperId, Integer userId) {

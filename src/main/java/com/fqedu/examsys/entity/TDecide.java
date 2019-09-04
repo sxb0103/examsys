@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class TDecide {
 
+    //
     private Integer id;
 
     private String topic;

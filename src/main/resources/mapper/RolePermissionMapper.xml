@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fqedu.examsys.dao.RolePermissionDao">
+    <!--注释-->
     <insert id="insertRolPer" parameterType="map">
         insert INTO role_permission (rid,pid) VALUES (#{rid},#{pid})
     </insert>

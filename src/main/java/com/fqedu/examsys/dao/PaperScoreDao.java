@@ -7,6 +7,12 @@ import java.util.List;
 
 public interface PaperScoreDao {
 
+    /**
+     *
+     * @param sortId
+     * @param subId
+     * @return
+     */
     public List<PaperScore> findAll(@Param("sortId") Integer sortId, @Param("subId") Integer subId);
 
     public List<PaperScore> findListBySubId(Integer subId);

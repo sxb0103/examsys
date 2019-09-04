@@ -15,6 +15,10 @@ public class RoleServiceImpl implements RoleService {
     public RoleDao roleDao;
 
 
+    /**
+     *
+     * @return
+     */
     public List<Role> findAllRole() {
         return roleDao.findAllRole();
     }

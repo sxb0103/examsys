@@ -21,6 +21,11 @@ public class ImportController {
     @Autowired
     public TRadioService tRadioService;
 
+    /**
+     *
+     * @param upFile
+     * @return
+     */
     @RequestMapping("/import")
     public String importExcel(@RequestParam MultipartFile upFile){
 

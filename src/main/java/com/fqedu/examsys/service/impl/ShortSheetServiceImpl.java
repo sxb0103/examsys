@@ -11,6 +11,13 @@ public class ShortSheetServiceImpl implements ShortSheetService {
     @Autowired(required = false)
     public ShortSheetDao shortSheetDao;
 
+    /**
+     *
+     * @param paperId
+     * @param userId
+     * @param shortId
+     * @param score
+     */
     @Override
     public void updateShortSheet(Integer paperId, Integer userId, Integer shortId, Integer score) {
 

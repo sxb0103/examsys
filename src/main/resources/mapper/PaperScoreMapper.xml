@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fqedu.examsys.dao.PaperScoreDao">
+    <!--注释-->
     <select id="findAll" parameterType="map" resultType="paperScore">
         select
         a.sortId,d.sort_name,a.subId,e.course,a.id,a.paperName,a.startime,a.endtime,b.paperId,b.userId,b.short_score,

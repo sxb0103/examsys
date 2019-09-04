@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fqedu.examsys.dao.TRadioDao">
+    <!--注释-->
     <insert id="insertTRadioAll" parameterType="java.util.List">
         insert INTO t_radio (topic,answer_A,answer_B,answer_C,answer_D,answer,sub_id)
         VALUES

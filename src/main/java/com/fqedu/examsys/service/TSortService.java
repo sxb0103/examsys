@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface TSortService {
 
+    /**
+     *
+     * @return
+     */
     public List<TSort> findAllSort();
 
     public void updateSortByPaperId(Integer paperId,Integer userId,Integer shortScore);

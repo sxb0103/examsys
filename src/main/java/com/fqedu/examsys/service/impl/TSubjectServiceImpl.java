@@ -14,6 +14,11 @@ public class TSubjectServiceImpl implements TSubjectService {
     @Autowired(required = false)
     TSubjectDao tSubjectDao;
 
+    /**
+     *
+     * @param sortId
+     * @return
+     */
     @Override
     public List<TSubject> findSubBySortId(Integer sortId) {
         return tSubjectDao.findSubBySortId(sortId);

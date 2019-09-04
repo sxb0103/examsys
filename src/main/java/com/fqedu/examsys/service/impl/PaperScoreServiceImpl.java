@@ -16,6 +16,14 @@ public class PaperScoreServiceImpl implements PaperScoreService {
     @Autowired(required = false)
     public PaperScoreDao paperScoreDao;
 
+    /**
+     *
+     * @param sortId
+     * @param subId
+     * @param page
+     * @param limit
+     * @return
+     */
     @Override
     public List<PaperScore> findAll(Integer sortId, Integer subId, Integer page, Integer limit) {
 

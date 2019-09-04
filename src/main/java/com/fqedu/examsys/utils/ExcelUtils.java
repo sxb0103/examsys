@@ -14,7 +14,7 @@ import java.util.Map;
 public class ExcelUtils {
 
     /**
-     * 读取上传的Excel内容
+     * 读取上传的Excel内容.
      *
      * @param fileName    上传的文件名
      * @param inputStream 输入流
