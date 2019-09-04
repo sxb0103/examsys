@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class Admin {
+
+    //主键id
     private Integer id;
 
     private String account;
