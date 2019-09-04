@@ -14,6 +14,7 @@ public class Admin {
 
     private String password;
 
+    //权限id
     private Integer rid;
 
 
