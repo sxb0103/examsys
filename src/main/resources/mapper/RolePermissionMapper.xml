@@ -1,10 +1,52 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fqedu.examsys.dao.RolePermissionDao">
-    <!--注释-->
+
+    <resultMap id="rolePermissionMap" type="rolePermission">
+        <id column="role_permission_id" property="rolePermissionId"/>
+        <result column="rid" property="rid"/>
+        <result column="pid" property="pid"/>
+
+        <association property="role">
+            <id column="rid" property="rid"/>
+            <result column="roleName" property="roleName"/>
+        </association>
+
+        <association property="permission">
+            <id column="pid" property="pid"/>
+            <result column="resource_name" property="resourceName"/>
+            <result column="parent_id" property="parentId"/>
+            <result column="permission_name" property="permissionName"/>
+            <result column="resource_type" property="resourceType"/>
+            <result column="url" property="url"/>
+        </association>
+    </resultMap>
+    <select id="findRolePerm" parameterType="map" resultMap="rolePermissionMap">
+        select rp.role_permission_id,r.roleName,p.resource_name from role r
+        inner join role_permission rp on r.rid = rp.rid
+        inner join permission p on rp.pid = p.pid
+        <where>
+            <if test="roleName != null and roleName != ''">
+                r.roleName like '%${roleName}%'
+            </if>
+            <if test="resourceName != null and resourceName != ''">
+                and p.resource_name like '%${resourceName}%'
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteRolePerm" parameterType="int">
+        delete from role_permission where rolePermissionId = #{rolePermissionId}
+    </delete>
+
+    <delete id="deleteManyRolePerm" parameterType="map">
+        delete from role_permission where role_permission_id in
+        <foreach collection="array" item="rolePermissionId" open="(" close=")" separator=",">
+            #{rolePermissionId}
+        </foreach>
+    </delete>
+
     <insert id="insertRolPer" parameterType="map">
         insert INTO role_permission (rid,pid) VALUES (#{rid},#{pid})
     </insert>

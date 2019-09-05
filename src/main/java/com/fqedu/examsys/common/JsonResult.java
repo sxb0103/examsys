@@ -16,8 +16,9 @@ public class JsonResult {
     public JsonResult() {
     }
 
-    public JsonResult(long count, Object data) {
-       new JsonResult(0,"",count,data);
+    public JsonResult(int code, Object data) {
+        this.code = code;
+        this.data = data;
     }
 
     public JsonResult(int code, String msg, long count, Object data) {

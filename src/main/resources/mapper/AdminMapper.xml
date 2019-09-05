@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqedu.examsys.dao.AdminDao">
+
+    <resultMap id="AdminMap" type="admin">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="admName" property="admName"/>
+        <result column="password" property="password"/>
+        <result column="rid" property="rid"/>
+        <association property="role">
+            <id column="rid" property="rid"/>
+            <result column="roleName" property="roleName"/>
+        </association>
+    </resultMap>
+
+    <select id="findByAccount" parameterType="string" resultMap="AdminMap">
+        select * from admin where account = #{account}
+  </select>
+
+    <select id="findRoleAccount" parameterType="string" resultType="string">
+        select r.roleName from admin a inner join
+        role r on a.rid = r.rid
+        where a.account = #{account}
+    </select>
+
+    <select id="findPermAccount" parameterType="string" resultType="string">
+        select DISTINCT p.permission_name from permission p
+        inner join role_permission rp on p.pid = rp.pid
+        inner join admin a on rp.rid = a.rid
+        where  a.account = #{account}
+    </select>
+
+    <select id="findAdminAll" parameterType="map" resultMap="AdminMap">
+        select a.id,a.account,a.admName,r.roleName,r.rid from admin a
+        inner join role r on a.rid = r.rid
+        <where>
+            <if test="account != null and account != ''">
+                a.account like '%${account}%'
+            </if>
+            <if test="admName != null and admName != ''">
+                and a.admName like '%${admName}%'
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and r.roleName = #{roleName}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAdmin" parameterType="int" resultMap="AdminMap">
+        select a.id,a.account,a.admName,r.roleName,r.rid from admin a
+        inner join role r on a.rid = r.rid
+        where id = #{id}
+    </select>
+
+    <delete id="deleteAdmin" parameterType="int">
+        delete from admin where id = #{id}
+    </delete>
+
+    <delete id="deleteManyAdmin" parameterType="map">
+        delete from admin where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findById" parameterType="int" resultType="admin">
+        select * from admin where id = #{id}
+    </select>
+
+    <update id="updateAdmin" parameterType="admin">
+        update admin set account = #{account} , admName = #{admName}, password = #{password}, rid = #{rid} where id = #{id}
+    </update>
+
+    <update id="updatePassword" parameterType="map">
+        update admin set  password = #{password} where id = #{id}
+    </update>
+
+    <insert id="addAdmin" parameterType="map">
+        insert into admin values (null , #{account}, #{admName}, #{password},#{rid})
+    </insert>
+
+    <select id="findPassword" parameterType="string" resultMap="AdminMap">
+        select * from admin where password = #{password}
+  </select>
+
+
+    <select id="findByPaperUserId" parameterType="map" resultType="paperAnswer">
+        select a.id,a.paperId,a.userId,a.short_reply,a.short_id,b.topic,b.answer,c.username
+        from short_sheet a INNER JOIN t_short_answer b on a.short_id=b.id
+                           INNER JOIN user c on a.userId=c.id
+        where a.paperId=#{paperId} and a.userId=#{userId}
+    </select>
+
+</mapper>

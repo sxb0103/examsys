@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqedu.examsys.dao.UserDao">
+    <resultMap id="userMap" type="com.fqedu.examsys.entity.User">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="username" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+
+    <select id="findByUserName" resultMap="userMap">
+    select * from user where userName = #{userName}
+  </select>
+    <insert id="addUser" parameterType="map">
+        insert into user values (null , #{account}, #{userName}, #{password},#{address},#{phone})
+    </insert>
+    <select id="findOneUser" resultMap="userMap">
+    select * from user
+  </select>
+</mapper>

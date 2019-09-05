@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<!--注释-->
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -11,7 +10,7 @@
     </style>
     <link rel="stylesheet" href="layui/css/layui.css" type="text/css"/>
     <script type="text/javascript" src="layui/layui.js"></script>
-    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/jquery-1.12.2.min.js"></script>
 
 </head>
 </head>
@@ -104,7 +103,7 @@
         //表头工具，获取科目
         $.ajax({
             type: "post",///post
-            url:"findAllSort.do", //"findAllSort.do",//demo.json
+            url:"admin/findAllSort.do", //"findAllSort.do",//demo.json
             dataType: "json",
             success: function (data) {
                 var html = "";
@@ -127,7 +126,7 @@
         function setSubject(sortId){
             $.ajax({
                 type: "post",
-                url: "findSubBySortId.do?sortId="+sortId,
+                url: "admin/findSubBySortId.do?sortId="+sortId,
                 // data:sortId,
                 dataType: "json",
                 success: function (data) {
@@ -235,7 +234,7 @@
                     // //向服务端发送删除指令
                     $.ajax({
                         type:'post',
-                        url:'updateDisplayOne.do',
+                        url:'admin/updateDisplayOne.do',
                         data:{"id": data.id},
                         dataType:'json',
                         success:function () {

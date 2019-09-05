@@ -1,10 +1,47 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fqedu.examsys.dao.RoleDao">
-    <!--注释-->
+    <resultMap id="RoleMap" type="com.fqedu.examsys.entity.Role">
+        <id column="rid" property="rid"/>
+        <result column="roleName" property="roleName"/>
+    </resultMap>
+
+    <select id="findRoleName" resultMap="RoleMap">
+        select rid,roleName from role;
+  </select>
+
+    <select id="findRoleAll" resultMap="RoleMap">
+        select * from role
+        <where>
+            <if test="roleName != null and roleName != ''">
+                roleName like '%${roleName}%'
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteRole" parameterType="int">
+        delete from role where rid = #{rid}
+    </delete>
+
+    <delete id="deleteManyRole" parameterType="map">
+        delete from role where rid in
+        <foreach collection="array" item="rid" open="(" close=")" separator=",">
+            #{rid}
+        </foreach>
+    </delete>
+
+    <select id="findByIdRole" parameterType="int" resultType="role">
+        select * from role where rid = #{rid}
+    </select>
+
+    <update id="updateRole" parameterType="role">
+        update role set roleName = #{roleName} where rid = #{rid}
+    </update>
+
+    <insert id="addRole" parameterType="role">
+        insert into role values (null ,#{roleName})
+    </insert>
+
     <select id="findAllRole" resultType="role">
         select rid,roleName from role;
     </select>

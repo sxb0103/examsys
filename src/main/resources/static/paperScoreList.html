@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<!--注释-->
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -11,8 +10,8 @@
     </style>
     <link rel="stylesheet" href="layui/css/layui.css" type="text/css"/>
     <script type="text/javascript" src="layui/layui.js"></script>
-    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
-    <script type="text/javascript" src="js/vue.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/jquery-1.12.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/vue.min.js"></script>
 
 </head>
 </head>
@@ -90,7 +89,7 @@
         //表头工具，获取科目
         $.ajax({
             type: "post",///post
-            url: "findAllSort.do", //"findAllSort.do",//demo.json
+            url: "admin/findAllSort.do", //"findAllSort.do",//demo.json
             dataType: "json",
             success: function (data) {
                 var html = "";
@@ -114,7 +113,7 @@
         function setSubject(sortId) {
             $.ajax({
                 type: "post",
-                url: "findSubBySortId.do?sortId=" + sortId,
+                url: "admin/findSubBySortId.do?sortId=" + sortId,
                 // data:sortId,
                 dataType: "json",
                 success: function (data) {
@@ -140,7 +139,7 @@
             elem: '#demo'
             , id: "videoTable"
             , height: 420
-            , url: 'findAll.do' //数据接口//findAll.do//demo.json
+            , url: 'admin/findAll.do' //数据接口//findAll.do//demo.json
             // ,toolbar:'#myBar'
             , title: '评分管理'
             , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档

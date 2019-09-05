@@ -37,15 +37,7 @@ public class PaperScoreController {
 //        return "videoIndex";
 //    }
 
-    /**
-     * 获取所有试卷成绩
-     * @param sortId
-     * @param subId
-     * @param page
-     * @param limit
-     * @return
-     */
-    @RequestMapping("/findAll.do")
+    @RequestMapping("/admin/findAll.do")
     @ResponseBody
     public JsonResult findAll(Integer sortId, Integer subId, Integer page, Integer limit) {
 
@@ -58,17 +50,12 @@ public class PaperScoreController {
         return jsonResult;
     }
 
-    /**
-     * 根据
-     * @param subId
-     * @return
-     */
-    @RequestMapping("/findBySubId.do")
+    @RequestMapping("/admin/findBySubId.do")
     public List<PaperScore> findAllBySubId(Integer subId) {
         return paperScoreService.findListBySubId(subId);
     }
 
-    @RequestMapping("/findAllSort.do")
+    @RequestMapping("/admin/findAllSort.do")
     @ResponseBody
     public JsonResult findAllSort(){
 
@@ -77,7 +64,7 @@ public class PaperScoreController {
         return new JsonResult(0,null,0,tSortList);
     }
 
-    @RequestMapping("/findSubBySortId.do")
+    @RequestMapping("/admin/findSubBySortId.do")
     @ResponseBody
     public JsonResult findSubBySortId(Integer sortId){
 
@@ -86,7 +73,7 @@ public class PaperScoreController {
         return new JsonResult(0,null,0,tSubjectList);
     }
 
-    @RequestMapping("/findByPaperUserId.do")
+    @RequestMapping("/admin/findByPaperUserId.do")
     @ResponseBody
     public JsonResult findByPaperUserId(Integer paperId, Integer userId){
 

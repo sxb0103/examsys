@@ -31,7 +31,7 @@ public class ShortSheetController {
      * @param userId
      * @return
      */
-    @RequestMapping("/updateShortSheet.do")
+    @RequestMapping("/admin/updateShortSheet.do")
     @ResponseBody
     public JsonResult updateShortSheet(HttpServletRequest request, Integer paperId, Integer userId) {
 

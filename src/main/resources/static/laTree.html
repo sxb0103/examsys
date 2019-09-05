@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
-<!--注释-->
 <head>
     <meta charset="utf-8">
     <title>layui</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/jquery-1.12.2.min.js"></script>
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
     <script type="text/javascript" src="layui/layui.all.js"></script>
     <!--<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
@@ -15,8 +14,8 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
-<div id="mybox" style="width: 800px; margin: 100px auto; display: flex">
 
+<div id="mybox" style="width: 800px; margin: 100px auto; display: flex">
 
     <div id="test12" class="demo-tree-more" style="width: 50%"></div>
     <form style="width: 50%;top: 200px;position: relative;">
@@ -138,7 +137,7 @@
         //获取角色id
         $.ajax({
             type: "post",
-            url: "findAllRole.do",//"findAllRole.do",//demo.json
+            url: "admin/findAllRole.do",//"findAllRole.do",//demo.json
             dataType: "json",
             success: function (data) {
                 if (data.code == 0) {
@@ -177,7 +176,7 @@
                     var ids=getCheckedId(checkedData);
                     $.ajax({
                         type:"post",
-                        url:"addRolePer.do",
+                        url:"admin/addRolePer.do",
                         data:{
                             "rid":$('#modules1').val(),
                             "jsonPer":ids

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqedu.examsys.dao.PermisionDao">
+
+    <resultMap id="permissionMap" type="permission">
+        <id column="pid" property="pid"/>
+        <result column="pmenu" property="resourceName"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="permission_name" property="permissionName"/>
+        <result column="resource_type" property="resourceType"/>
+        <result column="url" property="url"/>
+
+        <collection property="childPermissions" javaType="list" ofType="permission">
+            <id column="cpid" property="pid"></id>
+            <result column="cmenu" property="resourceName"></result>
+            <result column="url" property="url"/>
+        </collection>
+    </resultMap>
+
+    <select id="moveMenu" resultMap="permissionMap" parameterType="int">
+        select p.pid,p.resource_name pmenu,c.pid cpid,c.resource_name cmenu,c.url from permission p
+        inner join permission c
+        on p.pid = c.parent_id
+        inner join role_permission rp
+        on p.pid = rp.pid
+        inner join role r
+        on rp.rid = r.rid
+        inner join admin a
+        on a.rid = r.rid
+        where a.id = #{id}
+    </select>
+
+</mapper>

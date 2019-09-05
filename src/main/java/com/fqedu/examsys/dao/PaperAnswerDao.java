@@ -7,12 +7,6 @@ import java.util.List;
 
 public interface PaperAnswerDao {
 
-    /**
-     *
-     * @param paperId
-     * @param userId
-     * @return
-     */
     public List<PaperAnswer> findByPaperUserId(@Param("paperId") Integer paperId, @Param("userId") Integer userId);
 
 }

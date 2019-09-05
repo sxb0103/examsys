@@ -14,7 +14,7 @@ import org.springframework.transaction.interceptor.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-//事务类
+
 @Aspect
 @Configuration
 public class GlobalTransaction {

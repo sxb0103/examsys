@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
-<!--注释-->
 <head>
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="css/basic.css" media="all">
-    <script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/basic.css" media="all">
+    <script type="text/javascript" src="bootstrap/js/jquery-1.12.2.min.js"></script>
     <script type="text/javascript" src="layui/layui.js"></script>
-    <script type="text/javascript" src="js/vue.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/vue.min.js"></script>
     <style>
         .aa {
             padding: 12px 4px 30px 14px;
@@ -93,7 +92,7 @@
         //获取页面数据
         $.ajax({
             type: "get",
-            url: "findByPaperUserId.do" + window.location.search,//param 两种在静态页面中获取地址中参数的方法，jsp页面中可以用el表达式
+            url: "admin/findByPaperUserId.do" + window.location.search,//param 两种在静态页面中获取地址中参数的方法，jsp页面中可以用el表达式
             dataType: 'json',
             success: function (data) {
                 if (data.code == 0) {
@@ -184,7 +183,7 @@
 
             $.ajax({
                 type: 'post',
-                url: 'updateShortSheet.do' + window.location.search,
+                url: 'admin/updateShortSheet.do' + window.location.search,
                 data: {conditions:conditionsStr},
                 dataType: 'json',
                 success: function (data) {
